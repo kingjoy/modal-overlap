@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<title>Modal Popup Box</title>
+<head>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+
+<a href="#myModal" role="button" class="btn btn-primary" data-toggle="modal" style="width:200px; margin-top:200px; margin-left:160px;">Modals in Modal</a>
+
+<div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+             
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <textarea id="text1" class="form-control" rows="5" placeholder="product" autofocus></textarea>
+                <a href="#myModal1" role="button" class="glyphicon glyphicon-barcode" data-toggle="modal"></a>
+                <a href="" style="float: left">aaa</a>
+                <textarea id="text3" class="form-control " rows="2" placeholder="check"></textarea>
+                <textarea id="text4" class="form-control" rows="5" placeholder="test"></textarea>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="myModal1" class="modal modal-child" data-backdrop-limit="1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-modal-parent="#myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">jan code window</h4>
+            </div>
+            <div class="modal-body">
+                <p>Two modal body…1</p>
+                <textarea id="text2" class="form-control" rows="5" placeholder="bar code" autofocus></textarea>
+            </div>
+            <div class="modal-footer">
+                <input type="submit" id="submit" class="btn btn-default" data-dismiss="modal" name="submit">
+                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+$('.modal-child').on('show.bs.modal', function () {
+    var modalParent = $(this).attr('data-modal-parent');
+
+    $('.modal-child').draggable();
+
+    $(modalParent).css('opacity', 1);
+});
+ 
+$('.modal-child').on('hidden.bs.modal', function () {
+    var modalParent = $(this).attr('data-modal-parent');
+    $(modalParent).css('opacity', 1);
+});
+
+$(function() {
+  $('#submit').click(function() {
+    alert('ccccs');
+
+    var name = $('#text2').val();
+
+    var obj = new Object();
+
+    var str1 = {};
+
+    var txtArray=name.split('\n');
+        for(var i=0;i<txtArray.length;i++){
+            str1[i] = txtArray[i];
+
+        }
+
+    console.log(str1);
+    //var data = JSON.parse(txtArray);
+    var data1 = JSON.stringify(str1);    
+    console.log(data1);
+  
+    $.ajax({
+    type: "POST",
+    url: 'demo.php',
+    data: {jan_code:data1},
+    success: function(result){
+        alert('dddddd');
+        var res = result;
+        console.log(res);
+         console.log(res.length);
+         
+         for (var i=0; i<res.length; i++) {
+            $('#text1').append(res[i] + '\n');
+            //alert( $('#text1').val());
+         }
+
+        }   
+    });
+
+    });
+});
+
+</script>
+
+</body>
+</html>
